@@ -13,6 +13,6 @@ pub fn config_env(){
     }
 
     if !env_map.contains_key(&"SQLITE_MAIN_DB".to_string()){
-        set_var("SQLITE_MAIN_DB", "./main_db");
+        set_var("SQLITE_MAIN_DB", "./main.db");
     }
 }
