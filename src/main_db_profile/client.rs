@@ -58,4 +58,3 @@ async fn create_migration(db_path:&str){
     query(migrate_query).execute(&pool_client).await.expect("[-] Error While Migeration");
 
      }
-
