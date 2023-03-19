@@ -14,6 +14,6 @@ pub fn config_env(){
     }
 
     if !env_map.contains_key(&"SQLITE_MAIN_DB".to_string()){
-        set_var("SQLITE_MAIN_DB", "sqlite:../databases/main.db");
+        set_var("SQLITE_MAIN_DB", "/mnt/hdd/rust/sqlite-rust/databases/main.db");
     }
 }
