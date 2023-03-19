@@ -1,38 +1,42 @@
-use sqlx::{ConnectOptions,query, Error as SQL_Error,sqlite::{Sqlite,SqliteConnectOptions}, SqlitePool};
+use sqlx::{
+    query,
+    sqlite::{Sqlite, SqliteConnectOptions},
+    ConnectOptions, Error as SQL_Error, SqlitePool,
+};
 use std::path::Path;
 
-async fn create_main_db_if_not_exists(db_path:&str){
-    if Path::new(db_path).exists(){
-        return ()
-    }
-    else{
-       match SqliteConnectOptions::new().filename(db_path).create_if_missing(true).connect().await{
-            Ok(_)=>{
+async fn create_main_db_if_not_exists(db_path: &str) {
+    if Path::new(db_path).exists() {
+        return ();
+    } else {
+        match SqliteConnectOptions::new()
+            .filename(db_path)
+            .create_if_missing(true)
+            .connect()
+            .await
+        {
+            Ok(_) => {
                 create_migration(db_path).await;
                 return ();
-            },
-            Err(err)=>panic!("[-] Error While Createing {} : {}",db_path,err)
+            }
+            Err(err) => panic!("[-] Error While Createing {} : {}", db_path, err),
         };
     }
-
 }
 
+pub async fn get_main_pool_client(db_path: &str) -> SqlitePool {
+    create_main_db_if_not_exists(db_path).await;
 
-pub async fn get_main_pool_client(db_path:&str)->SqlitePool  {
+    let db_url: String = format!("sqlite:{}", db_path);
 
-    create_main_db_if_not_exists(db_path).await;    
-    
-    let db_url:String=format!("sqlite:{}",db_path);
-
-       match  SqlitePool::connect(db_url.as_str()).await {
-            Ok(client)=>client,
-             Err(err)=>panic!("[-] Error While Connecting {} : {}",db_url,err)
-       }
+    match SqlitePool::connect(db_url.as_str()).await {
+        Ok(client) => client,
+        Err(err) => panic!("[-] Error While Connecting {} : {}", db_url, err),
+    }
 }
 
-
-async fn create_migration(db_path:&str){
-    let migrate_query:&str =r"
+async fn create_migration(db_path: &str) {
+    let migrate_query: &str = r"
     
     CREATE TABLE Departments(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,10 +55,12 @@ async fn create_migration(db_path:&str){
     );
             ";
 
-
-
-    let db_url:String=format!("sqlite:{}",db_path);
-    let pool_client= SqlitePool::connect(db_url.as_str()).await.expect("[-] Error While Connecting ");
-    query(migrate_query).execute(&pool_client).await.expect("[-] Error While Migeration");
-
-     }
+    let db_url: String = format!("sqlite:{}", db_path);
+    let pool_client = SqlitePool::connect(db_url.as_str())
+        .await
+        .expect("[-] Error While Connecting ");
+    query(migrate_query)
+        .execute(&pool_client)
+        .await
+        .expect("[-] Error While Migeration");
+}
