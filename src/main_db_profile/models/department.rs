@@ -1,8 +1,8 @@
 use super::super::client::get_main_pool_client;
-use sqlx::{query, query_as, sqlite::SqliteQueryResult, Error as SqliteError, Sqlite, SqlitePool};
+use sqlx::{FromRow,query, query_as, sqlite::SqliteQueryResult, Error as SqliteError, Sqlite, SqlitePool};
 use std::env::var;
 
-#[derive(sqlx::FromRow, Debug)]
+#[derive(FromRow, Debug)]
 pub struct Department {
     pub id: i32,
     pub department_name: String,
@@ -32,7 +32,7 @@ impl Department {
         let pool_client: SqlitePool =
             get_main_pool_client(var("SQLITE_MAIN_DB").unwrap().as_str()).await;
         let sql_query: &str = r"SELECT * FROM Departments;";
-        let result: Result<Vec<Department>, SqliteError> = query_as::<Sqlite, Self>(sql_query)
+        let result: Result<Vec<Self>, SqliteError> = query_as::<Sqlite, Self>(sql_query)
             .fetch_all(&pool_client)
             .await;
         return result;
@@ -66,7 +66,7 @@ impl Department {
         new_department_name: Option<&str>,
         new_description: Option<&str>,
     ) -> Result<(), SqliteError> {
-        let department: Department;
+        let department: Self;
         match Self::get_department_by_id(id).await {
             Ok(result) => {
                 match result {
