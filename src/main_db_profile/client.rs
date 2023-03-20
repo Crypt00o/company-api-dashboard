@@ -46,8 +46,8 @@ async fn create_migration(db_path: &str) {
 
     CREATE TABLE Employees(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        first_name VARCHAR(50),
-        last_name VARCHAR(50),
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL,
         email VARCHAR(50) NOT NULL CHECK( email LIKE '%@%.%'),
         salary INTEGER NOT NULL DEFAULT(0),
         department_id INTEGER NOT NULL,
