@@ -1,5 +1,7 @@
 use super::super::client::get_main_pool_client;
-use sqlx::{FromRow,query, query_as, sqlite::SqliteQueryResult, Error as SqliteError, Sqlite, SqlitePool};
+use sqlx::{
+    query, query_as, sqlite::SqliteQueryResult, Error as SqliteError, FromRow, Sqlite, SqlitePool,
+};
 use std::env::var;
 
 #[derive(FromRow, Debug)]
