@@ -104,7 +104,7 @@ impl Employee {
 
         let sql_query: &str = r"UPDATE Employees SET first_name=? , last_name=? , email=? , salary=?, department_id=?  WHERE id = ? ;";
         let result: Result<SqliteQueryResult, SqliteError> =
-            query::<Sqlite>(sql_query).execute(&pool_client).await;
+            query::<Sqlite>(sql_query).bind(first_name).bind(last_name).bind(email).bind(salary).bind(department_id).bind(id).execute(&pool_client).await;
         match result {
             Ok(_) => return Ok(()),
             Err(err) => return Err(err),
