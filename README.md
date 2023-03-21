@@ -1,4 +1,4 @@
-## Simple Project Simulate Company Managament through Cli 
+## Simple Project Simulate Company Managament through API
 
 - Created with rust and useing sqlite3 database as Company datastore , You Don,t Need to install `sqlite3` to run this cli app 
 - I Implement My Knowledge in rust through simple project
@@ -8,3 +8,6 @@ like this :
 SQLITE_MAIN_DB=/path/to/new_db.db
 ```
 - by default db will be in the current dir you run app on and it,s name will be `main.db`
+
+
+i use `sqlite` as dbms for createing Company database and i use `tide` as backend framework and `tokio` as async lib
