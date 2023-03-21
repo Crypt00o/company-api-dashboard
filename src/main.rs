@@ -1,7 +1,5 @@
 mod config;
 mod main_db_profile;
-use std::error::Error;
-
 use config::config_env;
 use tide;
 
